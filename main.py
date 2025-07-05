@@ -5,6 +5,44 @@ import io
 import os
 from docx import Document
 import fitz  # PyMuPDF
+def set_theme(mode):
+    if mode == "Dark":
+        st.markdown(
+            """
+            <style>
+            .stApp {
+                background-color: #0E1117;
+                color: #FAFAFA;
+            }
+            .stMarkdown, .stTextInput, .stSelectbox, .stButton, .stFileUploader {
+                background-color: #262730;
+                color: #FAFAFA;
+                border-radius: 8px;
+            }
+            </style>
+            """,
+            unsafe_allow_html=True
+        )
+    else:  # Light
+        st.markdown(
+            """
+            <style>
+            .stApp {
+                background-color: #F5F5F5;
+                color: #222222;
+            }
+            .stMarkdown, .stTextInput, .stSelectbox, .stButton, .stFileUploader {
+                background-color: #ffffff;
+                color: #222222;
+                border-radius: 8px;
+            }
+            </style>
+            """,
+            unsafe_allow_html=True
+        )
+
+mode = st.selectbox("🌓 Choose Theme", ["Light", "Dark"])
+set_theme(mode)
 
 # 💠 Responsive + animated background
 st.markdown(
