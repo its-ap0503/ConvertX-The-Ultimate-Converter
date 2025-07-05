@@ -34,7 +34,7 @@ st.markdown("""
     font-weight: 500;
 }
 </style>
-<div class="custom-note">Note: Max upload size is 10 MB</div>
+<div class="custom-note">Note: Currently the Max upload size is only 1 MB</div>
 """, unsafe_allow_html=True)
 
 def text_to_pdf(uploaded_file):
@@ -82,7 +82,7 @@ st.title("📂ConvertX - File Converter")
 uploaded_file = st.file_uploader("Upload your file:", type=["pdf", "docx", "txt"])
 
 if uploaded_file:
-    if uploaded_file.size > 10 * 1024 * 1024:
+    if uploaded_file.size > 2 * 1024 * 1024:
         st.error("❌ File size exceeds 10MB limit.")
     else:
         options = [".pdf", ".docx", ".txt"]
