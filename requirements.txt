@@ -1,0 +1,15 @@
+ipykernel
+scikit-learn
+numpy
+pandas
+matplotlib
+seaborn
+streamlit
+Pillow
+python-docx
+fpdf
+openpyxl
+moviepy
+docx
+PyMuPDF
+pdf2docx
