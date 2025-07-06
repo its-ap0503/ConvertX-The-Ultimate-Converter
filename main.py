@@ -82,8 +82,8 @@ st.title("📂ConvertX - File Converter")
 uploaded_file = st.file_uploader("Upload your file:", type=["pdf", "docx", "txt"])
 
 if uploaded_file:
-    if uploaded_file.size > 2 * 1024 * 1024:
-        st.error("❌ File size exceeds 10MB limit.")
+    if uploaded_file.size > 1 * 1024 * 1024:
+        st.error("❌ File size exceeds 1MB limit.")
     else:
         options = [".pdf", ".docx", ".txt"]
         convert_to = st.selectbox("Convert to format:", options)
