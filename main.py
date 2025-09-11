@@ -1,44 +1,17 @@
 import streamlit as st
 import io
 import os
-import tempfile
-import logging
 from typing import Optional, Tuple
-import asyncio
-from concurrent.futures import ThreadPoolExecutor
 
-# Better PDF libraries
+# Core PDF libraries (these work on Streamlit Cloud)
 import fitz  # PyMuPDF - faster and more reliable
 from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
-from reportlab.lib.utils import ImageReader
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
-from reportlab.lib.units import inch
 
-# Better DOCX handling
+# DOCX handling
 from docx import Document
-from docx.shared import Inches
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-
-# Alternative conversion libraries
-try:
-    import mammoth  # Better HTML conversion for DOCX
-    MAMMOTH_AVAILABLE = True
-except ImportError:
-    MAMMOTH_AVAILABLE = False
-
-try:
-    from xhtml2pdf import pisa  # Better HTML to PDF conversion
-    XHTML2PDF_AVAILABLE = True
-except ImportError:
-    XHTML2PDF_AVAILABLE = False
-
-try:
-    import weasyprint  # Modern CSS-based PDF generation
-    WEASYPRINT_AVAILABLE = True
-except ImportError:
-    WEASYPRINT_AVAILABLE = False
 
 # Configure Streamlit page
 st.set_page_config(
@@ -47,7 +20,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Enhanced CSS styling with better performance
+# Enhanced CSS styling
 st.markdown("""
 <style>
 .stApp {
@@ -70,16 +43,6 @@ st.markdown("""
     border-radius: 10px;
     margin: 0.5rem 0;
     border-left: 4px solid #667eea;
-}
-
-.status-success {
-    color: #28a745;
-    font-weight: bold;
-}
-
-.status-error {
-    color: #dc3545;
-    font-weight: bold;
 }
 
 .file-info {
@@ -294,6 +257,18 @@ def process_conversion(uploaded_file, target_format: str, file_info: dict):
             output_file = io.BytesIO(output_bytes)
             mime_type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
         
+        elif source_ext == ".docx" and target_format == ".txt":
+            status_text.text("Extracting text from DOCX...")
+            progress_bar.progress(60)
+            
+            doc = Document(io.BytesIO(file_bytes))
+            text_content = ""
+            for paragraph in doc.paragraphs:
+                text_content += paragraph.text + "\n"
+            
+            output_file = io.BytesIO(text_content.encode("utf-8"))
+            mime_type = "text/plain"
+        
         progress_bar.progress(90)
         status_text.text("Finalizing...")
         
@@ -338,7 +313,7 @@ def main():
         st.markdown("""
         <div class="feature-card">
             <h4>🔒 Secure Processing</h4>
-            <p>Files processed locally with caching</p>
+            <p>Files processed securely with caching</p>
         </div>
         """, unsafe_allow_html=True)
     
@@ -349,7 +324,7 @@ def main():
     uploaded_file = st.file_uploader(
         "Choose a file to convert",
         type=["pdf", "docx", "txt"],
-        help="Supported formats: PDF, DOCX, TXT. Maximum recommended size: 100MB"
+        help="Supported formats: PDF, DOCX, TXT. Maximum recommended size: 50MB for cloud deployment"
     )
     
     if uploaded_file:
@@ -399,7 +374,7 @@ def main():
                         st.info("Choose font size for PDF output")
                     
                     preserve_formatting = st.checkbox("Preserve formatting (when possible)", value=True)
-                    enable_caching = st.checkbox("Enable caching for faster processing", value=True)
+                    st.info("Uses ReportLab and PyMuPDF for optimal quality")
                 
                 # Convert button
                 if st.button("🚀 Convert File", type="primary", use_container_width=True):
@@ -440,23 +415,26 @@ def main():
     
     # Additional information
     st.markdown("---")
-    with st.expander("ℹ️ Supported Conversions & Tips"):
+    with st.expander("ℹ️ Supported Conversions & Features"):
         st.markdown("""
         **Supported Conversions:**
-        - **TXT → PDF**: Creates formatted PDF documents
-        - **DOCX → PDF**: Preserves formatting and layout
-        - **PDF → TXT**: Extracts text content
+        - **TXT → PDF**: Creates formatted PDF documents with ReportLab
+        - **DOCX → PDF**: Preserves formatting and layout using advanced processing
+        - **DOCX → TXT**: Extracts plain text content
+        - **PDF → TXT**: Extracts text content using PyMuPDF
         - **PDF → DOCX**: Converts to editable Word document
         
-        **Performance Tips:**
-        - Files under 50MB process fastest
-        - Enable caching for repeated conversions
-        - Complex PDFs may take longer to convert
+        **Performance Features:**
+        - ⚡ **Caching**: Repeated conversions are lightning fast
+        - 🎨 **Format Preservation**: Maintains fonts, sizes, and basic formatting
+        - 🔒 **Security**: Files processed locally, not stored
+        - 📱 **Mobile Friendly**: Works on all devices
         
-        **Quality Notes:**
-        - Text-based conversions preserve content accurately
-        - Image-heavy PDFs may lose some formatting
-        - DOCX formatting is preserved as much as possible
+        **Quality Features:**
+        - Uses **PyMuPDF** for fast, accurate PDF processing
+        - Uses **ReportLab** for professional PDF generation
+        - Intelligent text extraction and formatting
+        - Progress tracking and error handling
         """)
     
     st.markdown('</div>', unsafe_allow_html=True)
