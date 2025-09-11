@@ -1,0 +1,24 @@
+[server]
+# Increase file upload limit to 500MB
+maxUploadSize = 500
+
+# Increase message size for large file processing
+maxMessageSize = 500
+
+# Enable websocket compression for better performance
+enableWebsocketCompression = true
+
+# Enable CORS for development
+enableCORS = true
+
+[browser]
+# Disable auto-open for deployment
+gatherUsageStats = false
+
+[theme]
+# Custom theme colors
+primaryColor = "#667eea"
+backgroundColor = "#ffffff"
+secondaryBackgroundColor = "#f0f2f6"
+textColor = "#262730"
+font = "sans serif"

@@ -13,3 +13,34 @@ moviepy
 docx
 PyMuPDF
 pdf2docx
+# Enhanced ConvertX Requirements
+
+# Core Streamlit
+streamlit>=1.28.0
+
+# PDF Processing Libraries
+PyMuPDF>=1.23.0  # fitz - for fast PDF processing
+reportlab>=4.0.0  # Advanced PDF generation
+pypdf>=3.0.0  # Alternative PDF library
+
+# DOCX Processing
+python-docx>=0.8.11
+docxcompose>=1.4.0  # For merging DOCX files
+
+# Optional HTML/CSS to PDF converters
+xhtml2pdf>=0.2.5  # HTML to PDF
+weasyprint>=60.0  # Modern CSS-based PDF generation
+mammoth>=1.5.0  # Better DOCX to HTML conversion
+
+# Image processing (for PDF with images)
+Pillow>=10.0.0
+
+# Additional utilities
+lxml>=4.9.0  # XML processing
+beautifulsoup4>=4.12.0  # HTML parsing
+requests>=2.31.0  # HTTP requests
+aiofiles>=23.0.0  # Async file operations
+
+# Development and debugging
+loguru>=0.7.0  # Better logging
+typing-extensions>=4.7.0  # Type hints
